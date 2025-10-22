@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Dynamic Paginator</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <!-- 
+        DEVELOPMENT
+        <link rel="stylesheet" href="../libs/dynamic-paginator.css">
+        <script src="../libs/dynamic-paginator.js"></script>
+    -->
+    <!-- 
+        DEPLOYMENT -->
+        <link rel="stylesheet" href="../dist/dynamic-paginator.min.css">
+        <script src="../dist/dynamic-paginator.js"></script>
+    
+</head>
+<body style="background: #2d2d2d;">
+    <div id="dynamic-paginate-elm" style="margin-right:10px"></div>
+    <script>
+        $(function(){
+            let $dpg = $('#dynamic-paginate-elm').dynamicPaginator({
+                clientSideSearch:false,
+                colorTheme:"dark",
+                itemsIndexKey:false,
+                setCountsPerPage:[5,10,20,50,100,250,500,1000],
+                getInfoURL:"http://127.0.0.1:3000/data/invoices/info",
+                loadListURL:"http://127.0.0.1:3000/data/invoices/list",
+                httpRequestHeaders:{'X-CSRF-TOKEN': "EWhAhSaA6wFEmtOk33ZTMqn0uwuMzHWEnbxgRegO"},
+                itemProperties:[
+                    {"key": "id","label": "Id"},
+                    {"key": "name","label": "Name"},
+                    {"key": "emailid","label": "Email Address"},
+                    {"key": "address","label": "Address"},
+                    {"key": "date","label": "Date"},
+                    {"key": "phone_number","label": "Phone No"}
+                ],
+                indexedItemPropertiesKeys:["id","name","emailid","address","phone_number"],
+                items:[],
+                totalItemsCount:100,
+                countsPerPage:6,
+                currentViewValues:{
+                    pageNo:1
+                },
+                paginationBlock:{
+                    jumpTo:true,
+                    template:{
+                        background:false
+                    },
+                    hideOnSinglePage:false
+                },
+                userParamListner:false
+            });
+            let paginatorInstanceID = $dpg.instaceId;
+            $dpg.on('page-loaded', function() {
+                console.log("EVENT::page-loaded");
+            })
+            .on('next-click', function() {
+                console.log("EVENT::next-click");
+            })
+            .on('prev-click', function() {
+                console.log("EVENT::prev-click");
+            })
+            .on('count-change', function() {
+                console.log("EVENT::count-change");
+            })
+            .on('sorted', function() {
+                console.log("EVENT::sorted");
+            });
+        });
+    </script>
+</body>
+</html>
