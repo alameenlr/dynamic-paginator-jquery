@@ -2,11 +2,11 @@
 
 ##### Listing in a Table
 
-![Listing in a Table](https://raw.githubusercontent.com/alameenlr/dynamic-paginator/main/rmd-imgs/table.gif)
+![Listing in a Table](https://raw.githubusercontent.com/alameenlr/dynamic-paginator-jquery/main/rmd-imgs/table.gif)
 
 ##### Custom Listing
 
-![Custom Listing](https://raw.githubusercontent.com/alameenlr/dynamic-paginator/main/rmd-imgs/cats.gif)
+![Custom Listing](https://raw.githubusercontent.com/alameenlr/dynamic-paginator-jquery/main/rmd-imgs/cats.gif)
 
 Dynamic Paginator(jQuery), or DynamicPaginator is a jQuery JavaScript Library. It is fast library to do pagination in your web applications. DynamicPaginator(jQuery) needs only *total items count*, *counts per page* and *data URL* to fetch the data, It will generate a pagination view for you. You can use custom templates, styles suitable for your Purpose.
   
@@ -59,7 +59,6 @@ The next step is to reference the dynamic-paginator's script
 
 </div>
 
-```v>
 ```
 
 You can now instantiate a new DynamicPaginator object:
