@@ -561,3 +561,9 @@ Event triggered when view per Page count Updated.
 
  - **`sorted`**
 Event triggered when sorted view sorted.
+
+ - **`info-load-error`**
+Event triggered while error in Paginator Info Loading.
+
+ - **`page-load-error`**
+Event triggered while error in Paginator Page Content Loading.

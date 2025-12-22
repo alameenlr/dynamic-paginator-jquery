@@ -1,5 +1,5 @@
 /*!
- * Dynamic Paginator v1.0.2 (https://github.com/alameenlr/dynamic-paginator)
+ * Dynamic Paginator v1.0.3 (https://github.com/alameenlr/dynamic-paginator)
  * Copyright (c) Al-Ameen LR <alameenlr@outlook.com>
  * Licensed under MIT (https://github.com/alameenlr/dynamic-paginator/license.txt)
  */
@@ -533,6 +533,16 @@
                 //sorted
                 element.trigger( "sorted", [ options.currentViewValues] );
                 // console.log("EVENT:sorted");
+            },
+            eventInfoLoadError: function(response, element, options){
+                //sorted
+                element.trigger( "info-load-error", [ response, options.currentViewValues ] );
+                // console.log("EVENT:info-load-error");
+            },
+            eventPageLoadError: function(response, element, options){
+                //sorted
+                element.trigger( "page-load-error", [ response, options.currentViewValues ] );
+                // console.log("EVENT:page-load-error");
             }
         }
         
@@ -869,6 +879,7 @@
                             loadPageAfterUpdateView($e,options);
                         },
                         error:function(e){
+                            triggerEvents.eventInfoLoadError(e, $e, options);
                             console.log("Unable to fetch the data from getInfoURL:"+options.getInfoURL)
                         }
                     });
@@ -1088,11 +1099,13 @@
                                     throw "Response is not an array Object";
                                 }
                             }catch(e){
+                                triggerEvents.eventPageLoadError(e, $e, options);
                                 console.error("Unable to fetch the data from loadListURL:"+options.loadListURL,e);
                                 console.log("Response Must be in Array.");
                             }
                         },
                         error:function(e){
+                            triggerEvents.eventInfoLoadError(e, $e, options);
                             console.log("Unable to fetch the data from getInfoURL:"+options.getInfoURL)
                         }
                     });
@@ -1361,6 +1374,7 @@
                         intiatePaginator(instaceId,$t,options);
                     },
                     error:function(e){
+                        triggerEvents.eventInfoLoadError(e, $t, options);
                         console.log("Unable to fetch the data from getInfoURL:"+options.getInfoURL)
                     }
                 });
@@ -1376,25 +1390,27 @@
             let newOption = getInOption(instaceId);
             let getEl = DPFNS.getLRSDPGElement;
             let $pgel = getEl('pagination',$t).find('.page-nav');
-            let $cs = getEl('count-select',$t);
-            if($cs){
-                $cs.html(newOption.makeCountSelection(newOption.dpParamKeys.count,newOption.currentViewValues.count,newOption.totalItemsCount,newOption.setCountsPerPage));
+            let fnOpUpdate = function(){
+                let $cs = getEl('count-select',$t);
+                if($cs){
+                    $cs.html(newOption.makeCountSelection(newOption.dpParamKeys.count,newOption.currentViewValues.count,newOption.totalItemsCount,newOption.setCountsPerPage));
+                }
+                let $sb = getEl('search-box',$t);
+                if($sb){
+                    $sb.html(newOption.makeSearchBox(newOption));
+                }
+                let $ph = getEl('property-head',$t);
+                if($ph){
+                    $ph.html(newOption.itemProperties.map(
+                        p=>newOption.makeItemPropertyLabel(
+                            p,
+                            newOption.indexedItemPropertiesKeys.indexOf(p.key)>-1,
+                            (newOption.currentViewValues?.orderBy==p.key?newOption.currentViewValues?.orderByIn:false)
+                        )
+                    ).join(''));
+                }
             }
-            let $sb = getEl('search-box',$t);
-            if($sb){
-                $sb.html(newOption.makeSearchBox(newOption));
-            }
-            let $ph = getEl('property-head',$t);
-            if($ph){
-                $ph.html(newOption.itemProperties.map(
-                    p=>newOption.makeItemPropertyLabel(
-                        p,
-                        newOption.indexedItemPropertiesKeys.indexOf(p.key)>-1,
-                        (newOption.currentViewValues?.orderBy==p.key?newOption.currentViewValues?.orderByIn:false)
-                    )
-                ).join(''));
-            }
-
+            fnOpUpdate();
             if(newOption.getInfoURL==""){
                 $pgel.html(paginationSection.paginationComponent(newOption));
                 paginationSection.setJumpToComponentView($t,newOption);
@@ -1415,12 +1431,14 @@
                         newOption = DPFNS.functionNametoFunction(newOption);
                         newOption = DPFNS.setOptionFromVars(newOption);
                         setInOption(instaceId,newOption);
+                        fnOpUpdate();
                         $pgel.html(paginationSection.paginationComponent(newOption));
                         paginationSection.setJumpToComponentView($t,newOption);
                         addeventListners(instaceId, $t, newOption);
                         loadPage(instaceId, $t, newOption, true);
                     },
                     error:function(e){
+                        triggerEvents.eventInfoLoadError(e, $e, options);
                         console.log("Unable to fetch the data from getInfoURL:"+newOption.getInfoURL)
                     }
                 });
