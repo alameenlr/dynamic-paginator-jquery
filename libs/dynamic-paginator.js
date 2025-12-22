@@ -1335,7 +1335,7 @@
                 DPFNS.setUserParamsInElement($e, options);
             }
             $.each($e.find('.dynamic-paginator-input[name]'),function(i,e){
-                console.log( e.name,e.value)
+                // console.log(e.name,e.value);
                 let k = e.name;
                 let v = e.value;
                 options.currentViewValues.userParams = options.currentViewValues?.userParams??{};
